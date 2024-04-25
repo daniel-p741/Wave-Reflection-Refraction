@@ -168,58 +168,46 @@ window.onload = function () {
     function refractedLight() {
         initial_light.rotation.set(0, 0, 0);
         reflected_light.rotation.set(0, 0, 0);
-        //refracted_light.rotation.set(0, 0, 0);
         reflected_light.visible = false;
         refracted_light.visible = true;
 
-        let refractiveIndex = 1.33;
+        let refractiveIndex = 1.33; // Default index
         if (waterFlag) {
             refractiveIndex = 1.33;
-
-        }
-        else if (glassFlag) {
+        } else if (glassFlag) {
             refractiveIndex = 1.52;
-
         }
 
         slider.value = 0;
         angleValue.textContent = '0°';
 
+        // Function to update light based on the current angle
+        function updateLight(angleInDegrees) {
+            let angleInRadians = THREE.Math.degToRad(angleInDegrees);
 
-        slider.oninput = function () {
-            let angle = parseFloat(this.value); // Get angle in degrees from the slider
-            angleValue.textContent = angle + '°'; // Update the displayed angle value
-
-            // Convert the angle from degrees to radians
-            let angleInRadians = THREE.Math.degToRad(angle);
-
-            // Define the axis of rotation (in this case, the z-axis)
             let axis = new THREE.Vector3(0, 0, 1);
 
-            // Reset the rotation of the initial light
             initial_light.rotation.set(0, 0, 0);
-            // Rotate the initial light counterclockwise around the z-axis
             initial_light.rotateOnAxis(axis, angleInRadians);
 
-            // Calculate the refracted angle using Snell's Law
-            let sinTheta2 = Math.sin(angleInRadians) / refractiveIndex; // Adjust for refraction
+            let sinTheta2 = Math.sin(angleInRadians) / refractiveIndex;
             let refractedAngleRadians = Math.asin(sinTheta2);
 
-            // Adjust refracted light based on refracted angle
             refracted_light.rotation.set(0, 0, 0);
             refracted_light.position.copy(reflected_position);
             refracted_light.setDirection(new THREE.Vector3(1, -1, 0).normalize());
-            // Rotate the refracted light clockwise by the refracted angle
             refracted_light.rotateOnAxis(axis, -refractedAngleRadians);
+        }
+
+        // Initialize the lights with the default angle of 0
+        updateLight(0);
+
+        // Update lights on slider input
+        slider.oninput = function () {
+            let angle = parseFloat(this.value);
+            angleValue.textContent = angle + '°';
+            updateLight(angle);
         };
-
-
-
-
-
-
-
-
     }
 
     function animate() {
