@@ -45,10 +45,16 @@ window.onload = function () {
 
     scene.add(surface);
 
+    let waterFlag = false;
+
+    let glassFlag = false;
+
     document.getElementById('waterbutton').addEventListener('click', function () {
         surfaceMaterial.color.setHex(0x5555FF);
         surfaceMaterial.transparent = true;
         surfaceMaterial.opacity = 0.4;
+        glassFlag = false;
+        waterFlag = true;
     });
 
     //#03a89a
@@ -57,6 +63,8 @@ window.onload = function () {
 
         surfaceMaterial.transparent = true;
         surfaceMaterial.opacity = 0.4;
+        glassFlag = true;
+        waterFlag = false;
     });
 
 
@@ -147,9 +155,26 @@ window.onload = function () {
         };
     };
 
+    document.getElementById("refractionbutton").addEventListener("click", refractedLight);
+
+    function refractedLight() {
+        let refractiveIndex = 0;
+        if (waterFlag) {
+            refractiveIndex = 1.33;
+
+        }
+        else if (glassFlag) {
+            refractiveIndex = 1.5;
+
+        }
 
 
 
+
+
+        console.log(refractiveIndex);
+
+    }
 
     function animate() {
 

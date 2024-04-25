@@ -51,7 +51,22 @@ html {
     font-size: 30px;
     z-index: 1;
     background-color: #f7b733;
-    color: rgb(231, 227, 227);
+    color: rgb(12, 12, 12);
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+}
+
+#refractionbutton {
+    position: absolute;
+    top: 250px;
+    /* Start at 10px from the top */
+    left: 300px;
+    width: 280px;
+    padding: 10px;
+    font-size: 30px;
+    z-index: 1;
+    background-color: #f7b733;
+    color: rgb(7, 7, 7);
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
 }
