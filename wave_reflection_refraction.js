@@ -200,7 +200,6 @@ window.onload = function () {
         // Function to update light based on the current angle
         function updateLight(angleInDegrees) {
             let angleInRadians = THREE.Math.degToRad(angleInDegrees);
-
             let axis = new THREE.Vector3(0, 0, 1);
 
             initial_light.rotation.set(0, 0, 0);
@@ -212,7 +211,7 @@ window.onload = function () {
             refracted_light.rotation.set(0, 0, 0);
             refracted_light.position.copy(reflected_position);
             refracted_light.setDirection(new THREE.Vector3(1, -1, 0).normalize());
-            refracted_light.rotateOnAxis(axis, -refractedAngleRadians);
+            refracted_light.rotateOnAxis(axis, refractedAngleRadians); // Corrected rotation direction
         }
 
         // Initialize the lights with the default angle of 0
