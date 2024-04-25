@@ -96,7 +96,10 @@ window.onload = function () {
 
     reflected_position = new THREE.Vector3(points[1].x, points[1].y, points[1].z);
     let reflected_light = new THREE.ArrowHelper(new THREE.Vector3(1, 1, 0), reflected_position, 5, 0xffff00);
-    scene.add(initial_light, reflected_light);
+    let refracted_light = new THREE.ArrowHelper(new THREE.Vector3(1, 1, 0), reflected_position, 5, 0xffff00);
+    reflected_light.visible = true;
+    refracted_light.visible = false;
+    scene.add(initial_light, reflected_light, refracted_light);
 
     let slider = document.getElementById("incidentAngle");
     let angleValue = document.getElementById("angleValue");
@@ -117,11 +120,14 @@ window.onload = function () {
 
 
     function reflectedLight() {
+        reflected_light.visible = true;
+        refracted_light.visible = false;
 
         slider.value = 0;
         angleValue.textContent = '0°';
         initial_light.rotation.set(0, 0, 0);
         reflected_light.rotation.set(0, 0, 0);
+        refracted_light.rotation.set(0, 0, 0);
 
 
         slider.oninput = function () {
@@ -152,27 +158,72 @@ window.onload = function () {
             reflected_light.cone.material.transparent = true;
 
             reflected_light.cone.material.opacity = 1;
+
+
         };
     };
 
     document.getElementById("refractionbutton").addEventListener("click", refractedLight);
 
     function refractedLight() {
+        initial_light.rotation.set(0, 0, 0);
+        reflected_light.rotation.set(0, 0, 0);
+        refracted_light.rotation.set(0, 0, 0);
+        reflected_light.visible = false;
+        refracted_light.visible = true;
+
         let refractiveIndex = 0;
         if (waterFlag) {
             refractiveIndex = 1.33;
 
         }
         else if (glassFlag) {
-            refractiveIndex = 1.5;
+            refractiveIndex = 1.52;
 
         }
 
+        slider.value = 0;
+        angleValue.textContent = '0°';
+
+
+        slider.oninput = function () {
+            let angle = parseFloat(this.value); // Get angle in degrees from the slider
+            angleValue.textContent = angle + '°'; // Update the displayed angle value
+
+            // Convert the angle from degrees to radians
+            let angleInRadians = THREE.Math.degToRad(angle);
+
+            // Define the axis of rotation (in this case, the z-axis)
+            let axis = new THREE.Vector3(0, 0, 1);
+
+            // Reset the rotation of the initial light
+            initial_light.rotation.set(0, 0, 0);
+
+            // Rotate the initial light counterclockwise around the z-axis
+            initial_light.rotateOnAxis(axis, angleInRadians);
+
+
+
+            // Reset the rotation of the reflected light
+            refracted_light.rotation.set(0, 0, 0);
+
+            // Rotate the reflected light clockwise around the z-axis
+            refracted_light.rotateOnAxis(axis, -angleInRadians);
+
+            refracted_light.line.material.transparent = true;
+            refracted_light.line.material.opacity = 1;
+
+            refracted_light.cone.material.transparent = true;
+
+            refracted_light.cone.material.opacity = 1;
+        };
 
 
 
 
-        console.log(refractiveIndex);
+
+
+
 
     }
 
