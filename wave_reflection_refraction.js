@@ -1,6 +1,8 @@
 window.onload = function () {
     const container = document.querySelector('#canvas-container');
 
+    let reflectionFlag = true;
+
     let clock = new THREE.Clock();
 
     const scene = new THREE.Scene();
@@ -97,36 +99,52 @@ window.onload = function () {
 
     initial_light.cone.material.opacity = 0;
 
+    if (reflectionFlag) {
+        reflectedLight();
+    }
+
+    document.getElementById("reflectionbutton").addEventListener("click", reflectedLight);
 
 
-    slider.oninput = function () {
-        let angle = parseFloat(this.value); // Get angle in degrees from the slider
-        angleValue.textContent = angle + '°'; // Update the displayed angle value
 
-        // Convert the angle from degrees to radians
-        let angleInRadians = THREE.Math.degToRad(angle);
 
-        // Define the axis of rotation (in this case, the z-axis)
-        let axis = new THREE.Vector3(0, 0, 1);
+    function reflectedLight() {
 
-        // Reset the rotation of the initial light
+        slider.value = 0;
+        angleValue.textContent = '0°';
         initial_light.rotation.set(0, 0, 0);
-
-        // Rotate the initial light counterclockwise around the z-axis
-        initial_light.rotateOnAxis(axis, angleInRadians);
-
-        // Reset the rotation of the reflected light
         reflected_light.rotation.set(0, 0, 0);
 
-        // Rotate the reflected light clockwise around the z-axis
-        reflected_light.rotateOnAxis(axis, -angleInRadians);
 
-        reflected_light.line.material.transparent = true;
-        reflected_light.line.material.opacity = 1;
+        slider.oninput = function () {
+            let angle = parseFloat(this.value); // Get angle in degrees from the slider
+            angleValue.textContent = angle + '°'; // Update the displayed angle value
 
-        reflected_light.cone.material.transparent = true;
+            // Convert the angle from degrees to radians
+            let angleInRadians = THREE.Math.degToRad(angle);
 
-        reflected_light.cone.material.opacity = 1;
+            // Define the axis of rotation (in this case, the z-axis)
+            let axis = new THREE.Vector3(0, 0, 1);
+
+            // Reset the rotation of the initial light
+            initial_light.rotation.set(0, 0, 0);
+
+            // Rotate the initial light counterclockwise around the z-axis
+            initial_light.rotateOnAxis(axis, angleInRadians);
+
+            // Reset the rotation of the reflected light
+            reflected_light.rotation.set(0, 0, 0);
+
+            // Rotate the reflected light clockwise around the z-axis
+            reflected_light.rotateOnAxis(axis, -angleInRadians);
+
+            reflected_light.line.material.transparent = true;
+            reflected_light.line.material.opacity = 1;
+
+            reflected_light.cone.material.transparent = true;
+
+            reflected_light.cone.material.opacity = 1;
+        };
     };
 
 
