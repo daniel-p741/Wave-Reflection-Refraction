@@ -49,23 +49,7 @@ window.onload = function () {
 
     let glassFlag = false;
 
-    document.getElementById('waterbutton').addEventListener('click', function () {
-        surfaceMaterial.color.setHex(0x5555FF);
-        surfaceMaterial.transparent = true;
-        surfaceMaterial.opacity = 0.4;
-        glassFlag = false;
-        waterFlag = true;
-    });
 
-    //#03a89a
-    document.getElementById('glassbutton').addEventListener('click', function () {
-        surfaceMaterial.color.setHex(0x0bb6a8);
-
-        surfaceMaterial.transparent = true;
-        surfaceMaterial.opacity = 0.4;
-        glassFlag = true;
-        waterFlag = false;
-    });
 
 
 
@@ -104,6 +88,36 @@ window.onload = function () {
     let slider = document.getElementById("incidentAngle");
     let angleValue = document.getElementById("angleValue");
 
+    document.getElementById('waterbutton').addEventListener('click', function () {
+        surfaceMaterial.color.setHex(0x5555FF);
+        surfaceMaterial.transparent = true;
+        surfaceMaterial.opacity = 0.4;
+        glassFlag = false;
+        waterFlag = true;
+
+        slider.value = 0;
+        angleValue.textContent = '0°';
+        if (!reflectionFlag) {
+            refractedLight();
+        }
+
+    });
+
+    //#03a89a
+    document.getElementById('glassbutton').addEventListener('click', function () {
+        surfaceMaterial.color.setHex(0x0bb6a8);
+
+        surfaceMaterial.transparent = true;
+        surfaceMaterial.opacity = 0.4;
+        glassFlag = true;
+        waterFlag = false;
+        slider.value = 0;
+        angleValue.textContent = '0°';
+        if (!reflectionFlag) {
+            refractedLight();
+        }
+    });
+
     //let executebydefault = true;
 
     initial_light.cone.material.transparent = true;
@@ -120,6 +134,7 @@ window.onload = function () {
 
 
     function reflectedLight() {
+        reflectionFlag = true;
         reflected_light.visible = true;
         refracted_light.visible = false;
 
@@ -166,6 +181,7 @@ window.onload = function () {
     document.getElementById("refractionbutton").addEventListener("click", refractedLight);
 
     function refractedLight() {
+        reflectionFlag = false;
         initial_light.rotation.set(0, 0, 0);
         reflected_light.rotation.set(0, 0, 0);
         reflected_light.visible = false;
