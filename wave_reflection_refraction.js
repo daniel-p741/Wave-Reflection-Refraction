@@ -96,7 +96,7 @@ window.onload = function () {
 
     reflected_position = new THREE.Vector3(points[1].x, points[1].y, points[1].z);
     let reflected_light = new THREE.ArrowHelper(new THREE.Vector3(1, 1, 0), reflected_position, 5, 0xffff00);
-    let refracted_light = new THREE.ArrowHelper(new THREE.Vector3(1, 1, 0), reflected_position, 5, 0xffff00);
+    let refracted_light = new THREE.ArrowHelper(new THREE.Vector3(1, -1, 0), reflected_position, 5, 0xffff00);
     reflected_light.visible = true;
     refracted_light.visible = false;
     scene.add(initial_light, reflected_light, refracted_light);
@@ -104,7 +104,7 @@ window.onload = function () {
     let slider = document.getElementById("incidentAngle");
     let angleValue = document.getElementById("angleValue");
 
-    let executebydefault = true;
+    //let executebydefault = true;
 
     initial_light.cone.material.transparent = true;
 
@@ -127,7 +127,7 @@ window.onload = function () {
         angleValue.textContent = '0°';
         initial_light.rotation.set(0, 0, 0);
         reflected_light.rotation.set(0, 0, 0);
-        refracted_light.rotation.set(0, 0, 0);
+        //refracted_light.rotation.set(0, 0, 0);
 
 
         slider.oninput = function () {
@@ -168,11 +168,11 @@ window.onload = function () {
     function refractedLight() {
         initial_light.rotation.set(0, 0, 0);
         reflected_light.rotation.set(0, 0, 0);
-        refracted_light.rotation.set(0, 0, 0);
+        //refracted_light.rotation.set(0, 0, 0);
         reflected_light.visible = false;
         refracted_light.visible = true;
 
-        let refractiveIndex = 0;
+        let refractiveIndex = 1.33;
         if (waterFlag) {
             refractiveIndex = 1.33;
 
@@ -198,24 +198,19 @@ window.onload = function () {
 
             // Reset the rotation of the initial light
             initial_light.rotation.set(0, 0, 0);
-
             // Rotate the initial light counterclockwise around the z-axis
             initial_light.rotateOnAxis(axis, angleInRadians);
 
+            // Calculate the refracted angle using Snell's Law
+            let sinTheta2 = Math.sin(angleInRadians) / refractiveIndex; // Adjust for refraction
+            let refractedAngleRadians = Math.asin(sinTheta2);
 
-
-            // Reset the rotation of the reflected light
+            // Adjust refracted light based on refracted angle
             refracted_light.rotation.set(0, 0, 0);
-
-            // Rotate the reflected light clockwise around the z-axis
-            refracted_light.rotateOnAxis(axis, -angleInRadians);
-
-            refracted_light.line.material.transparent = true;
-            refracted_light.line.material.opacity = 1;
-
-            refracted_light.cone.material.transparent = true;
-
-            refracted_light.cone.material.opacity = 1;
+            refracted_light.position.copy(reflected_position);
+            refracted_light.setDirection(new THREE.Vector3(1, -1, 0).normalize());
+            // Rotate the refracted light clockwise by the refracted angle
+            refracted_light.rotateOnAxis(axis, -refractedAngleRadians);
         };
 
 
