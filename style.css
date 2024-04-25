@@ -28,9 +28,9 @@ html {
 
 #glassbutton {
     position: absolute;
-    top: 20px;
+    top: 150px;
     /* Start at 10px from the top */
-    left: 280px;
+    left: 10px;
     width: 200px;
     padding: 30px;
     font-size: 30px;
@@ -43,7 +43,7 @@ html {
 
 #reflectionbutton {
     position: absolute;
-    top: 250px;
+    top: 400px;
     /* Start at 10px from the top */
     left: 10px;
     width: 280px;
@@ -58,9 +58,9 @@ html {
 
 #refractionbutton {
     position: absolute;
-    top: 250px;
+    top: 500px;
     /* Start at 10px from the top */
-    left: 300px;
+    left: 10px;
     width: 280px;
     padding: 10px;
     font-size: 30px;
@@ -75,10 +75,10 @@ html {
 .slider-container {
     margin: 20px;
     position: absolute;
-    top: 150px;
-    left: 10px;
+    top: 340px;
+    left: 4px;
     z-index: 10;
-    font-size: 40px;
+    font-size: 20px;
 
 }
 
