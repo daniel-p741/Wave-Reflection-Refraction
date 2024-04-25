@@ -1,0 +1,12 @@
+{
+  "name": "wave-reflection-refraction",
+  "version": "1.0.0",
+  "description": "",
+  "main": "wave_reflection_refraction.js",
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1",
+    "start": "http-server ./ -p 8080"
+  },
+  "author": "",
+  "license": "ISC"
+}
