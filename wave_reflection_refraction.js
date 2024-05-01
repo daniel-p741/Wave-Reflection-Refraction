@@ -206,18 +206,25 @@ window.onload = function () {
         // Function to update light based on the current angle
         function updateLight(angleInDegrees) {
             let angleInRadians = THREE.Math.degToRad(angleInDegrees);
-            let axis = new THREE.Vector3(0, 0, 1);
+            let axis = new THREE.Vector3(0, 0, 1);  // Z-axis is the vertical axis
 
+            // Reset initial light to no rotation, then rotate based on input
             initial_light.rotation.set(0, 0, 0);
             initial_light.rotateOnAxis(axis, angleInRadians);
 
+            // Calculate the refracted angle using Snell's Law
             let sinTheta2 = Math.sin(angleInRadians) / refractiveIndex;
             let refractedAngleRadians = Math.asin(sinTheta2);
 
+            // Reset refracted light rotation and position to match initial light
             refracted_light.rotation.set(0, 0, 0);
-            refracted_light.position.copy(reflected_position);
-            refracted_light.setDirection(new THREE.Vector3(1, -1, 0).normalize());
-            refracted_light.rotateOnAxis(axis, refractedAngleRadians); // Corrected rotation direction
+            refracted_light.position.copy(initial_light.position);  // Ensure it starts at the same point
+
+            // Base rotation for 0 degrees: Flip the refracted light downward
+            refracted_light.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI);
+
+            // Apply additional rotation based on the refracted angle
+            refracted_light.rotateOnAxis(axis, -refractedAngleRadians);
         }
 
         // Initialize the lights with the default angle of 0
