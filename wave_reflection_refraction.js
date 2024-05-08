@@ -1,6 +1,8 @@
 window.onload = function () {
     const container = document.querySelector('#canvas-container');
 
+    let angle = 0;
+
     let reflectionFlag = true;
 
     let clock = new THREE.Clock();
@@ -110,15 +112,19 @@ window.onload = function () {
         reflected_light.visible = true;
         refracted_light.visible = false;
 
-        slider.value = 0;
-        angleValue.textContent = '0°';
+        slider.value = angle;
+        angleValue.textContent = angle + '°';
         initial_light.rotation.set(0, 0, 0);
         reflected_light.rotation.set(0, 0, 0);
         //refracted_light.rotation.set(0, 0, 0);
 
+        initial_light.rotation.set(0, 0, THREE.Math.degToRad(angle));
+
+        reflected_light.rotation.set(0, 0, THREE.Math.degToRad(-angle));
+
 
         slider.oninput = function () {
-            let angle = parseFloat(this.value); // Get angle in degrees from the slider
+            angle = parseFloat(this.value); // Get angle in degrees from the slider
             angleValue.textContent = angle + '°'; // Update the displayed angle value
 
             // Convert the angle from degrees to radians
@@ -190,6 +196,7 @@ window.onload = function () {
         reflectionFlag = false;
         initial_light.rotation.set(0, 0, 0);
         reflected_light.rotation.set(0, 0, 0);
+
         reflected_light.visible = false;
         refracted_light.visible = true;
 
@@ -200,8 +207,10 @@ window.onload = function () {
             refractiveIndex = 1.52;
         }
 
-        slider.value = 0;
-        angleValue.textContent = '0°';
+        slider.value = angle;
+        angleValue.textContent = angle + '°';
+
+
 
         // Function to update light based on the current angle
         function updateLight(angleInDegrees) {
@@ -209,15 +218,18 @@ window.onload = function () {
             let axis = new THREE.Vector3(0, 0, 1);  // Z-axis is the vertical axis
 
             // Reset initial light to no rotation, then rotate based on input
+
+
             initial_light.rotation.set(0, 0, 0);
             initial_light.rotateOnAxis(axis, angleInRadians);
 
             // Calculate the refracted angle using Snell's Law
+            refracted_light.rotation.set(0, 0, 0);
             let sinTheta2 = Math.sin(angleInRadians) / refractiveIndex;
             let refractedAngleRadians = Math.asin(sinTheta2);
 
             // Reset refracted light rotation and position to match initial light
-            refracted_light.rotation.set(0, 0, 0);
+
             refracted_light.position.copy(initial_light.position);  // Ensure it starts at the same point
 
             // Base rotation for 0 degrees: Flip the refracted light downward
