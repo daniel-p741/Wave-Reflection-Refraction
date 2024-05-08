@@ -199,7 +199,9 @@ window.onload = function () {
     function refractedLight() {
         reflectionFlag = false;
         initial_light.rotation.set(0, 0, 0);
+        //initial_light.rotation.set(0, 0, THREE.Math.degToRad(angle));
         reflected_light.rotation.set(0, 0, 0);
+        //reflected_light.rotation.set(0, 0, THREE.Math.degToRad(-angle));
 
         reflected_light.visible = false;
         refracted_light.visible = true;
@@ -225,6 +227,7 @@ window.onload = function () {
 
 
             initial_light.rotation.set(0, 0, 0);
+            //initial_light.rotation.set(0, 0, THREE.Math.degToRad(angle));
             initial_light.rotateOnAxis(axis, angleInRadians);
 
             // Calculate the refracted angle using Snell's Law
@@ -244,11 +247,11 @@ window.onload = function () {
         }
 
         // Initialize the lights with the default angle of 0
-        updateLight(0);
+        updateLight(angle);
 
         // Update lights on slider input
         slider.oninput = function () {
-            let angle = parseFloat(this.value);
+            angle = parseFloat(this.value);
             angleValue.textContent = angle + '°';
             updateLight(angle);
         };
