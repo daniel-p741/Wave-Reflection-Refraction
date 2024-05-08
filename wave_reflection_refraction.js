@@ -163,10 +163,12 @@ window.onload = function () {
         glassFlag = false;
         waterFlag = true;
         initial_light.rotation.set(0, 0, 0);
+        initial_light.rotation.set(0, 0, THREE.Math.degToRad(angle));
         reflected_light.rotation.set(0, 0, 0);
+        reflected_light.rotation.set(0, 0, THREE.Math.degToRad(-angle));
 
-        slider.value = 0;
-        angleValue.textContent = '0°';
+        slider.value = angle;
+        angleValue.textContent = angle + '°';
         if (!reflectionFlag) {
             refractedLight();
         }
@@ -182,9 +184,11 @@ window.onload = function () {
         glassFlag = true;
         waterFlag = false;
         initial_light.rotation.set(0, 0, 0);
+        initial_light.rotation.set(0, 0, THREE.Math.degToRad(angle));
         reflected_light.rotation.set(0, 0, 0);
-        slider.value = 0;
-        angleValue.textContent = '0°';
+        reflected_light.rotation.set(0, 0, THREE.Math.degToRad(-angle));
+        slider.value = angle;
+        angleValue.textContent = angle + '°';
         if (!reflectionFlag) {
             refractedLight();
         }
