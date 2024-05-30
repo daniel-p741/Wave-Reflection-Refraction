@@ -13,19 +13,18 @@ window.onload = function () {
 
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-    // Adjust the camera position for a better side view
-    camera.position.set(0, 1, 11.2);  // X-axis: 10 units, Y-axis: 5 units up, Z-axis: 10 units forward
-    //camera.position.set(10, 10, 11.2);  // Raise the Y-axis position
 
-    // Have the camera look at the center of the surface
-    //camera.lookAt(new THREE.Vector3(0, 0, 0));
-    //camera.lookAt(new THREE.Vector3(-2, 0, 5));
+    camera.position.set(0, 1, 11.2);
+
+
+
+
     camera.fov = 75;
     camera.updateProjectionMatrix();
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
 
-    //renderer.setSize(container.offsetWidth, container.offsetHeight);
+
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     container.appendChild(renderer.domElement);
@@ -40,7 +39,7 @@ window.onload = function () {
     });
 
     const surface = new THREE.Mesh(surfaceGeometry, surfaceMaterial);
-    //surface.rotation.x = -Math.PI / 2;
+
     surface.position.y = -4;
     surface.rotation.y = 2.285;
     surface.position.x = -1;
@@ -55,19 +54,19 @@ window.onload = function () {
 
 
 
-    var vFOV = camera.fov * Math.PI / 180; // convert vertical fov to radians
-    //var height = 2 * Math.tan(vFOV / 2) * camera.position.z; // visible height
+    var vFOV = camera.fov * Math.PI / 180;
+
     let distanceToOrigin = Math.sqrt(camera.position.x ** 2 + camera.position.y ** 2 + camera.position.z ** 2);
     height = 2 * Math.tan(vFOV / 2) * distanceToOrigin;
 
     // Calculate the y-coordinate of the top of the screen
     var topOfScreen = camera.position.y + height / 2;
-    //var topOfScreen = camera.position.y + height / 2 * Math.cos(camera.rotation.x);
+
 
     let points = [];
 
-    points.push(new THREE.Vector3(0, topOfScreen, 0)); // Start at the top of the screen
-    points.push(new THREE.Vector3(0, surface.position.y + 2, 0)); // End at the origin
+    points.push(new THREE.Vector3(0, topOfScreen, 0));
+    points.push(new THREE.Vector3(0, surface.position.y + 2, 0));
 
     let geometry = new THREE.BufferGeometry().setFromPoints(points);
 
@@ -77,7 +76,7 @@ window.onload = function () {
 
     initial_position = new THREE.Vector3(points[1].x, points[1].y, points[1].z)
 
-    //let initial_light = new THREE.ArrowHelper(new THREE.Vector3(1, -1, 0), initial_position, 5, 0xffff00);
+
     let initial_light = new THREE.ArrowHelper(new THREE.Vector3(-1, 1, 0), initial_position, 5, 0xffff00);
 
     reflected_position = new THREE.Vector3(points[1].x, points[1].y, points[1].z);
@@ -92,7 +91,7 @@ window.onload = function () {
 
 
 
-    //let executebydefault = true;
+
 
     initial_light.cone.material.transparent = true;
 
@@ -116,7 +115,7 @@ window.onload = function () {
         angleValue.textContent = angle + '°';
         initial_light.rotation.set(0, 0, 0);
         reflected_light.rotation.set(0, 0, 0);
-        //refracted_light.rotation.set(0, 0, 0);
+
 
         initial_light.rotation.set(0, 0, THREE.Math.degToRad(angle));
 
@@ -125,12 +124,12 @@ window.onload = function () {
 
         slider.oninput = function () {
             angle = parseFloat(this.value); // Get angle in degrees from the slider
-            angleValue.textContent = angle + '°'; // Update the displayed angle value
+            angleValue.textContent = angle + '°'; // Update the angle value displayed on the page
 
-            // Convert the angle from degrees to radians
+
             let angleInRadians = THREE.Math.degToRad(angle);
 
-            // Define the axis of rotation (in this case, the z-axis)
+
             let axis = new THREE.Vector3(0, 0, 1);
 
             // Reset the rotation of the initial light
@@ -175,7 +174,7 @@ window.onload = function () {
 
     });
 
-    //#03a89a
+
     document.getElementById('glassbutton').addEventListener('click', function () {
         surfaceMaterial.color.setHex(0x0bb6a8);
 
@@ -199,14 +198,14 @@ window.onload = function () {
     function refractedLight() {
         reflectionFlag = false;
         initial_light.rotation.set(0, 0, 0);
-        //initial_light.rotation.set(0, 0, THREE.Math.degToRad(angle));
+
         reflected_light.rotation.set(0, 0, 0);
-        //reflected_light.rotation.set(0, 0, THREE.Math.degToRad(-angle));
+
 
         reflected_light.visible = false;
         refracted_light.visible = true;
 
-        let refractiveIndex = 1.33; // Default index
+        let refractiveIndex = 1.33;
         if (waterFlag) {
             refractiveIndex = 1.33;
         } else if (glassFlag) {
@@ -221,13 +220,11 @@ window.onload = function () {
         // Function to update light based on the current angle
         function updateLight(angleInDegrees) {
             let angleInRadians = THREE.Math.degToRad(angleInDegrees);
-            let axis = new THREE.Vector3(0, 0, 1);  // Z-axis is the vertical axis
+            let axis = new THREE.Vector3(0, 0, 1);
 
             // Reset initial light to no rotation, then rotate based on input
 
-
             initial_light.rotation.set(0, 0, 0);
-            //initial_light.rotation.set(0, 0, THREE.Math.degToRad(angle));
             initial_light.rotateOnAxis(axis, angleInRadians);
 
             // Calculate the refracted angle using Snell's Law
@@ -239,17 +236,16 @@ window.onload = function () {
 
             refracted_light.position.copy(initial_light.position);  // Ensure it starts at the same point
 
-            // Base rotation for 0 degrees: Flip the refracted light downward
+            // Base rotation for 0 degrees: Flips the refracted light downward
             refracted_light.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI);
 
             // Apply additional rotation based on the refracted angle
             refracted_light.rotateOnAxis(axis, -refractedAngleRadians);
         }
 
-        // Initialize the lights with the default angle of 0
+
         updateLight(angle);
 
-        // Update lights on slider input
         slider.oninput = function () {
             angle = parseFloat(this.value);
             angleValue.textContent = angle + '°';
